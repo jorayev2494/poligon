@@ -1,0 +1,113 @@
+version: '3.9'
+
+x-php: &php_cli
+  build:
+    context: ./php_cli
+    dockerfile: dockerfile
+  restart: unless-stopped
+  volumes:
+    - ../:/var/project
+  working_dir: /var/project
+  depends_on:
+    - php_fpm
+  links:
+    - php_fpm
+
+services:
+  # Nginx Service
+  ngx:
+    build:
+      context: ./nginx
+      dockerfile: dockerfile
+    container_name: ${COMPOSE_PROJECT_NAME}-ngx
+    tty: true
+    ports:
+      - ${NGX_PORT}:80
+    volumes:
+      - ../:/var/project
+    depends_on:
+      - php_fpm
+    links:
+      - php_fpm
+    networks:
+      - poligon-network
+
+  # PHP Service
+  php_fpm:
+    build:
+      context: ./php_fpm
+      dockerfile: dockerfile
+    container_name: ${COMPOSE_PROJECT_NAME}-php-fpm
+    tty: true
+    volumes:
+      - ../:/var/project
+    depends_on:
+      - mysql
+    links:
+      - mysql
+    networks:
+      - poligon-network
+
+  # Mysql Service
+  mysql:
+    image: mysql:8.0
+    container_name: ${COMPOSE_PROJECT_NAME}-mysql
+    ports:
+      - ${MYSQL_PORT}:3306
+#    volumes:
+#      - ./mysql/data:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=${COMPOSE_PROJECT_NAME}
+      - MYSQL_ROOT_PASSWORD=laravel
+    networks:
+      - poligon-network
+
+  # REDIS Service
+  redis:
+    image: redis:latest
+    container_name: ${COMPOSE_PROJECT_NAME}-redis
+    restart: unless-stopped
+    ports:
+      - ${REDIS_PORT}:6379
+    networks:
+      - poligon-network
+
+  # Node Service
+  node:
+    build:
+      context: ./node
+      dockerfile: dockerfile
+    container_name: ${COMPOSE_PROJECT_NAME}-node
+    tty: true
+    restart: unless-stopped
+    volumes:
+      - ../:/var/project
+    networks:
+      - poligon-network
+
+  # RabbitMQ Service
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: ${COMPOSE_PROJECT_NAME}-rabbitmq
+    environment:
+      RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
+      RABBITMQ_DEFAULT_USER: "rabbitmq"
+      RABBITMQ_DEFAULT_PASS: "rabbitmq"
+      RABBITMQ_DEFAULT_VHOST: "/"
+    ports:
+      - ${RABBIT_MQ_MANAGEMENT}:15672
+      - ${RABBIT_MQ_PORT}:5672
+    networks:
+      - poligon-network
+
+  # Queue worker: email_queue
+  email_queue_worker:
+    <<: *php_cli
+    container_name: ${COMPOSE_PROJECT_NAME}-email-queue-worker
+    command: ['./artisan', 'rabbitmq:consume', '--queue=email_queue']
+    networks:
+      - poligon-network
+
+networks:
+  poligon-network:
+    driver: bridge

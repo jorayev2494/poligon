@@ -1,0 +1,30 @@
+FROM php:8.0-fpm
+
+RUN apt-get update
+RUN apt-get install -y zip
+RUN apt-get install -y unzip
+RUN apt-get install -y git
+RUN apt-get install -y curl
+RUN apt-get install -y vim
+RUN apt-get -y install imagemagick php8.0-imagick php8.0-pcntl php8.0-mysql php8.0-gd php8.0-pgsql php8.0-sqlite nano php8.0-redis php-bcmath php8.0-zmq\
+    && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
+
+# Install MySQLi
+RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli
+
+# Install PDO
+RUN docker-php-ext-install pdo_mysql
+
+# Composer installing
+RUN curl -sS https://getcomposer.org/installer | php \
+    && mv composer.phar /usr/local/bin/ \
+    && ln -s /usr/local/bin/composer.phar /usr/local/bin/composer
+
+
+COPY ./php.ini /usr/local/etc/php/conf.d/php.ini
+
+WORKDIR /var/project
+
+# CMD cd /var/project
+# CMD php artisan db:seed --class=StorageFilesSeeder
+# CMD php artisan migrate:fresh --seed
