@@ -89,11 +89,11 @@ services:
   rabbitmq:
     image: rabbitmq:3-management
     container_name: ${COMPOSE_PROJECT_NAME}-rabbitmq
-    environment:
-      RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
-      RABBITMQ_DEFAULT_USER: "rabbitmq"
-      RABBITMQ_DEFAULT_PASS: "rabbitmq"
-      RABBITMQ_DEFAULT_VHOST: "/"
+#    environment:
+#      RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
+#      RABBITMQ_DEFAULT_USER: "rabbitmq"
+#      RABBITMQ_DEFAULT_PASS: "rabbitmq"
+#      RABBITMQ_DEFAULT_VHOST: "/"
     ports:
       - ${RABBIT_MQ_MANAGEMENT}:15672
       - ${RABBIT_MQ_PORT}:5672
@@ -105,6 +105,10 @@ services:
     <<: *php_cli
     container_name: ${COMPOSE_PROJECT_NAME}-email-queue-worker
     command: ['./artisan', 'rabbitmq:consume', '--queue=email_queue']
+    depends_on:
+      - rabbitmq
+    links:
+      - rabbitmq
     networks:
       - poligon-network
 
