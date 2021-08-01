@@ -87,7 +87,7 @@ services:
 
   # RabbitMQ Service
   rabbitmq:
-    image: rabbitmq:3-management
+    image: rabbitmq:3.9.1-management
     container_name: ${COMPOSE_PROJECT_NAME}-rabbitmq
 #    environment:
 #      RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
