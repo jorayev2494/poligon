@@ -1,4 +1,5 @@
 openapi: 3.0.3
+
 info:
   title: 'Poligon API'
   version: 0.1.0
@@ -8,6 +9,7 @@ info:
     email: jorayev2494@gmail.com,
     url: https://github.com/jorayev2494
   }
+
 servers:
   - {
       description: 'localhost',
@@ -15,13 +17,14 @@ servers:
   }
 
 tags: null
+
 paths:
   /users:
     description: Get Users
     get:
       summary: Get Users
       tags:
-        - Users
+        - Public Users
 
       responses:
         200:
@@ -29,9 +32,83 @@ paths:
           content:
             application/json:
               schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserResource'
+
+  /users/{user_id}:
+    get:
+      summary: "Show User"
+      tags:
+        - Public Users
+
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 3
+
+      responses:
+        200:
+          description: "Show User"
+          content:
+            application/jsom:
+              schema:
                 $ref: '#/components/schemas/UserResource'
 
+    put:
+      summary: Update User
+      tags:
+        - Public Users
 
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 3
+
+        - name: name
+          in: query
+          required: false
+          schema:
+            type: string
+            example: "UserName"
+
+        - name: email
+          in: query
+          required: false
+          schema:
+            type: string
+            example: "user@gmail.com"
+
+      responses:
+        202:
+          description: Accepted Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResource'
+
+    delete:
+      summary: Delete User
+      tags:
+        - Public Users
+
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 3
+
+      responses:
+        204:
+          description: No Content
 
 components:
   schemas:
