@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use App\Models\Base\JWTAuthorizeModel;
@@ -17,8 +19,10 @@ class User extends JWTAuthorizeModel
      * @var array
      */
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
         'email',
+        'phone',
         'password',
     ];
 
@@ -39,5 +43,12 @@ class User extends JWTAuthorizeModel
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+    ];
+
+    /**
+     * @var string[]
+     */
+    protected $appends = [
+        'full_name'
     ];
 }
