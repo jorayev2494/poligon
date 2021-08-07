@@ -118,12 +118,18 @@ components:
         id:
           type: integer
           example: 1
-        name:
+        first_name:
           type: string
-          example: "Linda Cronin Sr."
+          example: "Linda"
+        last_name:
+          type: string
+          example: "Cronin"
         email:
           type: string
           example: "test@gmail.com"
+        phone:
+          type: string
+          example: "+38095123456"
         email_verified_at:
           type: string
           example: "17 hours ago"
