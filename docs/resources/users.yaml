@@ -1,0 +1,17 @@
+paths:
+  /users:
+    description: Get Users
+      get:
+        summary: Get Users
+        tags:
+          - Public Users
+
+        responses:
+          200:
+            description: "User Resource"
+    #        content:
+    #          application/json:
+    #            schema:
+    #              type: array
+    #              items:
+    ##                $ref: '#/components/schemas/UserResource'
