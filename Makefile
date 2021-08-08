@@ -136,6 +136,9 @@ server_info:	## Show Server Info
 	@echo ${Yellow}"Please go to the like show project: http://127.0.0.1:8088"
 	@echo ${Yellow}"Project OpenAPI Documentation: http://127.0.0.1:8088/api/documentation"
 
+psalm:	## Checking on Psalm
+	./vendor/bin/psalm --no-cache
+
 .PHONY: help
 help:	## Show Project commands
 	@#echo ${Cyan}"\t\t This project 'poligon' REST API!"
