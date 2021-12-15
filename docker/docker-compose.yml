@@ -101,16 +101,16 @@ services:
       - poligon-network
 
   # Queue worker: email_queue
-  email_queue_worker:
-    <<: *php_cli
-    container_name: ${COMPOSE_PROJECT_NAME}-email-queue-worker
-    command: ['./artisan', 'rabbitmq:consume', '--queue=email_queue']
-    depends_on:
-      - rabbitmq
-    links:
-      - rabbitmq
-    networks:
-      - poligon-network
+#   email_queue_worker:
+#     <<: *php_cli
+#     container_name: ${COMPOSE_PROJECT_NAME}-email-queue-worker
+#     command: ['./artisan', 'rabbitmq:consume', '--queue=email_queue']
+#     depends_on:
+#       - rabbitmq
+#     links:
+#       - rabbitmq
+#     networks:
+#       - poligon-network
 
 networks:
   poligon-network:
