@@ -121,14 +121,14 @@ bash:		## Exec Docker 'php_fpm' interactive bash
 
 vendor_install:		## Install project dependencies
 	command cd ./docker && docker-compose exec php_fpm composer install --ignore-platform-reqs
-	command cd ./docker && docker-compose exec php_fpm ./artisan key:generate
+	command cd ./docker && docker-compose exec php_fpm php artisan key:generate
 
 migrate:	## Start project migration & Database Seeder
-	command cd ./docker && docker-compose exec php_fpm ./artisan migrate:fresh
+	command cd ./docker && docker-compose exec php_fpm php artisan migrate:fresh
 	make seed
 
 seed:		## Run Database Seeder
-	command cd ./docker && docker-compose exec php_fpm ./artisan db:seed
+	command cd ./docker && docker-compose exec php_fpm php artisan db:seed
 
 .PHONY: server_info
 server_info:	## Show Server Info
