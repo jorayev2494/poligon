@@ -32,7 +32,7 @@ COPY ./php.ini /usr/local/etc/php/conf.d/php.ini
 
 WORKDIR /var/project
 
-RUN chown -R laravel:laravel /vendor
+# RUN chown -R laravel:laravel /vendor
 RUN chmod 755 -R ./storage
 
 
