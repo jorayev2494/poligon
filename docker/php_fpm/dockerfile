@@ -31,7 +31,7 @@ RUN curl -sS https://getcomposer.org/installer | php \
 COPY ./php.ini /usr/local/etc/php/conf.d/php.ini
 
 # RUN chown -R laravel:laravel /vendor
-RUN chmod -R 755 /var/project/storage
+# RUN chmod -R 755 /var/project/storage
 
 WORKDIR /var/project
 
