@@ -5,7 +5,7 @@ RUN useradd -u 1000 -ms /bin/bash -g laravel laravel
 
 COPY --chown=laravel:laravel ./ /app
 
-WORKDIR /app
+# WORKDIR /app
 
 RUN apt-get update
 RUN apt-get install -y zip
@@ -30,10 +30,12 @@ RUN curl -sS https://getcomposer.org/installer | php \
 
 COPY ./php.ini /usr/local/etc/php/conf.d/php.ini
 
-RUN chown -R laravel:laravel /app/vendor
-RUN chmod 755 -R /app/storage
-
 WORKDIR /var/project
+
+RUN chown -R laravel:laravel /vendor
+RUN chmod 755 -R ./storage
+
+
 
 # CMD cd /var/project
 # CMD php artisan db:seed --class=StorageFilesSeeder
