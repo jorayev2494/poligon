@@ -124,8 +124,10 @@ vendor_install:		## Install project dependencies
 	command cd ./docker && docker-compose exec php_fpm php artisan key:generate
 
 migrate:	## Start project migration & Database Seeder
-	docker exec -ti poligon-php-fpm php artisan migrate:fresh
-	make seed
+	command cd ./docker && docker-compose exec -t -i php_fpm php artisan migrate:fresh 
+	sleep 5
+	docker-compose --file ./docker/docker-compose.yml exec -t php_fpm php artisan db:seed
+	# make seed
 
 seed:		## Run Database Seeder
 	docker exec -t -i poligon-php-fpm php artisan db:seed

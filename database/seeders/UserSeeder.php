@@ -20,8 +20,10 @@ class UserSeeder extends Seeder
      */
     public function run(int $count = 5, array $attributes = ['password' => 'secret123_!']): void
     {
-        $this->count = $this->command->ask("Please get count", $count);
+        // $this->count = $this->command->ask("Please get count", $count);
 
-        User::factory()->count($this->count)->create($attributes);
+	$randomCount = random_int(10, 100);
+	User::factory()->count($randomCount)->create($attributes);
+	echo $randomCount . PHP_EOL;
     }
 }
