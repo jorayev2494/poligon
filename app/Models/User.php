@@ -13,6 +13,8 @@ class User extends JWTAuthorizeModel
 {
     use HasFactory, Notifiable;
 
+    public const AVATAR_PATH = '/users/avatars';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -21,6 +23,7 @@ class User extends JWTAuthorizeModel
     protected $fillable = [
         'first_name',
         'last_name',
+        'avatar',
         'email',
         'phone',
         'password',
@@ -51,4 +54,14 @@ class User extends JWTAuthorizeModel
     protected $appends = [
         'full_name'
     ];
+
+    /**
+     * @return string|null
+     */
+    public function getAvatarAttribute(): ?string
+    {
+        $avatar = $this->getRawOriginal('avatar');
+
+        return $avatar ? getenv('APP_URL') . $avatar : $avatar;
+    }
 }

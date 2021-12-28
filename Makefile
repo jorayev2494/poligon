@@ -107,6 +107,10 @@ up_build:	## Build upping project
 	command cd ./docker && docker-compose up --build -d
 	@echo ${Green}"Project Built and successfully upped!"${NC}
 
+up_build_php_fpm:	## Build upping php_fpm
+	command cd ./docker && docker-compose up --build -d --force-recreate php_fpm
+	@echo ${Green}"Project Built and successfully upped!"${NC}
+
 restart:	## Restarting project
 	command cd ./docker && docker-compose restart ${service}
 	@echo ${Green}"Project successfully restarted!"${NC}
@@ -117,6 +121,10 @@ down:		## Downing & Stopping project
 
 bash:		## Exec Docker 'php_fpm' interactive bash
 	command cd ./docker && docker-compose exec -t -i php_fpm bash
+	@echo ${Green}"PHP FPM bash!"${NC}
+
+storage_link:		## Exec Docker 'php_fpm' storage link
+	command cd ./docker && docker-compose exec -t -i php_fpm ./atisan storage:link
 	@echo ${Green}"PHP FPM bash!"${NC}
 
 vendor_install:		## Install project dependencies

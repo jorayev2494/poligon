@@ -39,11 +39,16 @@ class UserController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        $data = array_merge($request->all(), [
-            'email' => random_int(1, 100) . $request->get('email')
+        $validated = $request->validate([
+            'first_name' => 'string|min:2|max:50',
+            'last_name' => 'string|min:2|max:50',
+            'avatar' => 'file|mimes:jpg,jpeg,png',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|confirmed|min:6|max:20',
+            'phone' => 'required',
         ]);
 
-        $storedUser = $this->service->repository->create($data);
+        $storedUser = $this->service->create($validated);
 
         return response()->json(UserResource::make($storedUser));
     }
@@ -66,7 +71,16 @@ class UserController extends Controller
      */
     public function update(Request $request, int $id): JsonResponse
     {
-        $updatedUser = $this->service->updateUser($id, $request->all());
+        $validated = $request->validate([
+            'first_name' => 'string|min:2|max:50',
+            'last_name' => 'string|min:2|max:50',
+            'avatar' => 'file|mimes:jpg,jpeg,png',
+            'email' => "email|unique:users,email,{$id},id",
+            'password' => 'string|confirmed|min:6|max:20',
+            'phone' => "string",
+        ]);
+
+        $updatedUser = $this->service->updateUser($id, $validated);
 
         return response()->json(UserResource::make($updatedUser->refresh()), Response::HTTP_ACCEPTED);
     }
@@ -77,7 +91,7 @@ class UserController extends Controller
      */
     public function destroy(int $id): Response
     {
-        $this->service->repository->delete($id);
+        $this->service->delete($id);
 
         return response()->noContent();
     }

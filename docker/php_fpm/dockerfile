@@ -31,10 +31,12 @@ RUN curl -sS https://getcomposer.org/installer | php \
 COPY ./php.ini /usr/local/etc/php/conf.d/php.ini
 
 # RUN chown -R laravel:laravel /vendor
+# RUN chown -R laravel:laravel /vendor
+
 # RUN chmod -R 755 /var/project/storage
 
-WORKDIR /var/project
+RUN pwd
 
-# CMD cd /var/project
-# CMD php artisan db:seed --class=StorageFilesSeeder
-# CMD php artisan migrate:fresh --seed
+# RUN chown -R www-data:www-data /var/project/storage
+
+WORKDIR /var/project
