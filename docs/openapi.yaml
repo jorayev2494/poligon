@@ -23,6 +23,169 @@ servers:
 tags: null
 
 paths:
+  /auth/register:
+    post:
+      summary: Register a new user
+      tags:
+        - Authentication
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                first_name:
+                  type: string
+                  example: "Alex"
+                last_name:
+                  type: string
+                  example: "Alexeev"
+                email:
+                  type: string
+                  example: "user@gm.com"
+                password:
+                  type: string
+                  example: "secreT12345"
+                password_confirmation:
+                  type: string
+                  example: "secreT12345"
+      responses:
+        204:
+          description: User success login
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User successfully registered"
+
+  /auth/login:
+    post:
+      summary: Login
+      tags:
+        - Authentication
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: "user@gm.com"
+                password:
+                  type: string
+                  example: "secreT12345"
+      responses:
+        400:
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid credentials"
+        200:
+          description: User success logined
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginSchema'
+
+  /auth/refresh:
+    post:
+      summary: Refresh access token
+      tags:
+        - Authentication
+      responses:
+        401:
+          description: User Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthenticatedSchema'
+        200:
+          description: Access Token success full refreshed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginSchema'
+
+  /auth/logout:
+    post:
+      summary: Logout
+      tags:
+        - Authentication
+      responses:
+        401:
+          description: User Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthenticatedSchema'
+        204:
+          description: Success logouted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Successfully registered"
+
+  /profile:
+    get:
+      summary: Show profile
+      tags:
+        - Profile
+      responses:
+        200:
+          description: Show profile
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 93
+                  first_name:
+                    type: string
+                    example: "Alex"
+                  last_name:
+                    type: string
+                    example: "Alexeev"
+                  avatar:
+                    type: string
+                    example: "http://127.0.0.1:8088/storage/users/avatars/adonaodnoawndncons.jpg"
+                    nullable: true
+                  email:
+                    type: string
+                    example: "user@gm.com"
+                  phone:
+                    type: string
+                    example: "+380324892738"
+                    enum:
+                      - ""
+                  email_verified_at:
+                    type: string
+                    example: "01-02-2022 20:02:53"
+                    nullable: true
+                  created_at:
+                    type: string
+                    example: "01-02-2022 20:02:53"
+                  updated_at:
+                    type: string
+                    example: "01-02-2022 20:02:53"
+                  full_name:
+                    type: string
+                    example: "Alex Alexeev"
+
   /users:
     description: Get Users
     get:
@@ -232,6 +395,24 @@ components:
         updated_at:
           type: string
           example: "17 hours ago"
+    LoginSchema:
+      type: object
+      properties:
+        access_token:
+          type: string
+          example: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODA4OFwvYXBpXC9hdXRoXC9sb2dpbiIsImlhdCI6MTY0Mzc1MDQxMywiZXhwIjoxNjQzNzU0MDEzLCJuYmYiOjE2NDM3NTA0MTMsImp0aSI6IlF2d09wQmhKR0lFVWF6UDgiLCJzdWIiOjkzLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.OHCniB0IcBwA0vvJiTMGneB4KA9xBuEVmyNJBf-O9iI"
+        token_type:
+          type: string
+          example: "bearer"
+        expire_in:
+          type: integer
+          example: 3600
+    UnauthenticatedSchema:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Unauthenticated."
 
   responses: null
   headers: null

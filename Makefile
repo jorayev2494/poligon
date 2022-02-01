@@ -127,9 +127,13 @@ storage_link:		## Exec Docker 'php_fpm' storage link
 	command cd ./docker && docker-compose exec -t -i php_fpm ./atisan storage:link
 	@echo ${Green}"PHP FPM bash!"${NC}
 
+composer_install:
+	make vendor_install
+
 vendor_install:		## Install project dependencies
 	command cd ./docker && docker-compose exec php_fpm composer install --ignore-platform-reqs
 	command cd ./docker && docker-compose exec php_fpm php artisan key:generate
+	command cd ./docker && docker-compose exec -t -i php_fpm ./artisan jwt:secret
 
 migrate:	## Start project migration & Database Seeder
 	docker exec -ti poligon-php-fpm php artisan migrate:fresh
